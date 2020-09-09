@@ -2008,7 +2008,9 @@ class Instagram
     {
         $variables = ['precomposed_overlay' => false, 'reel_ids' => $reel_ids];
 
-        $response = Request::get(Endpoints::getStoriesLink($variables),
+        $url = Endpoints::getStoriesLink($variables);
+        $url = \str_replace('query_id=17873473675158481', 'query_hash=90709b530ea0969f002c86a89b4f2b8d',$url);
+        $response = Request::get($url,
             $this->generateHeaders($this->userSession));
 
         if ($response->code !== static::HTTP_OK) {
