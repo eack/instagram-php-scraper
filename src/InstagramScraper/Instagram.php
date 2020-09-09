@@ -1998,4 +1998,25 @@ class Instagram
         }
         return $highlights;
     }
+    
+    /**
+     * @param array $reel_ids - array of instagram user ids
+     * @return array
+     * @throws InstagramException
+     */
+    public function getStoriesExtendedRaw(array $reel_ids)
+    {
+        $variables = ['precomposed_overlay' => false, 'reel_ids' => $reel_ids];
+
+        $response = Request::get(Endpoints::getStoriesLink($variables),
+            $this->generateHeaders($this->userSession));
+
+        if ($response->code !== static::HTTP_OK) {
+            throw new InstagramException('Response code is ' . $response->code . '. Body: ' . static::getErrorBody($response->body) . ' Something went wrong. Please report issue.', $response->code);
+        }
+
+        $jsonResponse = $this->decodeRawBodyToJson($response->raw_body);
+        
+        return $jsonResponse;
+    }
 }
